@@ -20,6 +20,7 @@
   const missLabel = document.getElementById('miss');
   const timerLabel = document.getElementById('timer');
   let startTime;
+  let isPlaying = false;
 
 
   function updateTarget() {
@@ -39,6 +40,8 @@
     }, 10);
 
     if (timeLeft < 0) {
+      isPlaying = false;
+
       clearTimeout(timeoutId);
       timerLabel.textContent = '0.00';
       setTimeout(() => {
@@ -48,13 +51,22 @@
   }
 
   window.addEventListener('click', () => {
+    if (isPlaying === true) {
+      return;
+    }
+
+    isPlaying = true;
+
     target.textContent = word;
     startTime = Date.now();
     updateTimer();
   });
 
   window.addEventListener('keydown', e => {
-    console.log(e.key);
+    if (isPlaying !== true) {
+      return;
+    }
+
     if (e.key === word[loc]) {
       loc++;
       if (loc === word.length) {
